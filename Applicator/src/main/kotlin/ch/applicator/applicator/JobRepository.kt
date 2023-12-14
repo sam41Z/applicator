@@ -47,5 +47,11 @@ class JobRepository @Autowired constructor(val create: DSLContext) {
             .fetchSingle()
     }
 
+    fun delete(id: UUID) {
+        create.deleteFrom(JOB)
+            .where(JOB.ID.eq(id))
+            .execute()
+    }
+
 
 }

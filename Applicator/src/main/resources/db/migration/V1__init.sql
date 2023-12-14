@@ -10,7 +10,7 @@ create table employer
 create table job
 (
     id           uuid primary key,
-    employer     uuid references employer,
+    employer     uuid references employer on delete cascade,
     description  text,
     position     text,
     original_url text
