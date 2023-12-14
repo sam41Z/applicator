@@ -1,7 +1,8 @@
-import {useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import changeByPath from "../utils";
 import {Save2Fill} from "react-bootstrap-icons";
+import {InfoModalContext} from "../modals/InfoModalContext";
 
 export default function ApplicationForm({jobId, application}) {
     const initialApplication = application ? application : {
@@ -10,6 +11,7 @@ export default function ApplicationForm({jobId, application}) {
     };
     initialApplication.job = jobId;
     const navigate = useNavigate();
+    const showInfoModal = useContext(InfoModalContext);
     const [currentApplication, setApplication] = useState(initialApplication);
 
     const saveApplication = (event) => {
@@ -23,7 +25,7 @@ export default function ApplicationForm({jobId, application}) {
         };
         fetch("http://localhost:3000/applications" + suffix, requestOptions)
             .then((res) => (res.ok) ? res.json() : Promise.reject(res.statusText))
-            .catch(error => alert(error))
+            .catch(error => showInfoModal("Error", error, "OK"))
             .then(res => navigate("/applications/" + res.id + "/edit"));
     };
 

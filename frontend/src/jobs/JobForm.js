@@ -1,7 +1,8 @@
-import {useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import changeByPath from "../utils";
 import {DiscFill, Save2Fill, SaveFill} from "react-bootstrap-icons";
+import {InfoModalContext} from "../modals/InfoModalContext";
 
 export default function JobForm({job}) {
     const initialJob = job ? {...job} : {
@@ -16,6 +17,7 @@ export default function JobForm({job}) {
     const [currentJob, setJob] = useState(initialJob);
 
     const navigate = useNavigate();
+    const showInfoModal = useContext(InfoModalContext);
     const saveJob = (event) => {
         event.preventDefault();
         const method = job ? "PUT" : "POST";
@@ -27,7 +29,7 @@ export default function JobForm({job}) {
         };
         fetch("http://localhost:3000/jobs" + suffix, requestOptions)
             .then((res) => (res.ok) ? res.json() : Promise.reject(res.statusText))
-            .catch(error => alert(error))
+            .catch(error => showInfoModal("Error", error, "OK"))
             .then(d => navigate("/jobs/" + d.id + "/edit"));
 
     };
