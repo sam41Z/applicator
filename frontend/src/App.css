@@ -1,0 +1,11 @@
+.App {
+  text-align: left;
+  justify-content: center;
+  display: flex;
+  margin-top: 3rem;
+}
+
+.ApplicationList {
+  width: 800px;
+}
+
