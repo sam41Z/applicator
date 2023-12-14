@@ -3,6 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import changeByPath from "../utils";
 import {Save2Fill} from "react-bootstrap-icons";
 import {InfoModalContext} from "../modals/InfoModalContext";
+import FloppyFill from "../FloppyFill";
 
 export default function ApplicationForm({jobId, application}) {
     const initialApplication = application ? application : {
@@ -44,7 +45,7 @@ export default function ApplicationForm({jobId, application}) {
                           onChange={handleOnChange}
                           className="form-control" rows="15"></textarea>
             </div>
-            <button type="submit" className="btn btn-primary"><Save2Fill/></button>
+            <button type="submit" className="btn btn-primary"><FloppyFill/> Save</button>
         </form>
     );
 }

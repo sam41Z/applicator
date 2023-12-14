@@ -1,15 +1,18 @@
-import {Link, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import ApplicationStatus from "../applications/ApplicationStatus";
-import app from "../App";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import React, {useContext, useEffect, useState} from "react";
 import ApplicationDetails from "../applications/ApplicationDetails";
-import {PencilFill} from "react-bootstrap-icons";
+import {PencilFill, Trash3Fill} from "react-bootstrap-icons";
+import {ActionModalContext} from "../modals/ActionModalContext";
+import {InfoModalContext} from "../modals/InfoModalContext";
 
 export default function JobDetails() {
     const {id} = useParams();
     const url = "http://localhost:3000/jobs/" + id;
     const [job, setJob] = useState(undefined);
     const [isLoading, setIsLoading] = useState(true);
+    const showActionModal = useContext(ActionModalContext);
+    const showInfoModal = useContext(InfoModalContext);
+    const navigate = useNavigate();
     const fetchJob = () => {
         return fetch(url)
             .then((res) => res.json())
@@ -18,6 +21,17 @@ export default function JobDetails() {
                 setIsLoading(false);
             });
     };
+
+    const fetchDeleteJob = (jobId) => {
+        const requestOptions = {
+            method: "DELETE",
+        };
+        fetch("http://localhost:3000/jobs/" + jobId, requestOptions)
+            .then(res => res.ok ? Promise.resolve() : Promise.reject(res.statusText))
+            .then(() => navigate("/"))
+            .catch(error => showInfoModal("Error", error, "OK"));
+    };
+
     useEffect(() => {
         fetchJob();
     }, []);
@@ -38,7 +52,19 @@ export default function JobDetails() {
                         {job.description}
                     </div>
                 </div>
-                <div><Link to="edit" className="btn btn-outline-primary mb-3"><PencilFill/> Job</Link></div>
+                <div className=" mb-3">
+                    <Link to="edit" className="btn btn-outline-primary me-3"><PencilFill/> Job</Link>
+                    <button className="btn btn-outline-danger" onClick={() => showActionModal(
+                        "Delete Job",
+                        "Are you sure you want to remove \"" + job.position + "\" at \"" +
+                        job.employer.name + "\"?",
+                        "No no!",
+                        "Yes, Im sure!",
+                        job.id,
+                        fetchDeleteJob)}>
+                        <Trash3Fill/>
+                    </button>
+                </div>
                 <div><ApplicationDetails jobId={job.id}/></div>
             </div>
         );
