@@ -25,8 +25,9 @@ export default function JobForm({job}) {
             body: JSON.stringify(currentJob)
         };
         fetch("http://localhost:3000/jobs" + suffix, requestOptions)
-            .then((res) => res.json())
-            .then(res => navigate("/jobs/" + res.id + "/edit"));
+            .then((res) => (res.ok) ? res.json() : Promise.reject(res.statusText))
+            .catch(error => alert(error))
+            .then(d => navigate("/jobs/" + d.id + "/edit"));
 
     };
 

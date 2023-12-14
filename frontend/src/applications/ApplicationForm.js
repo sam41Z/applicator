@@ -21,14 +21,15 @@ export default function ApplicationForm({jobId, application}) {
             body: JSON.stringify(currentApplication)
         };
         fetch("http://localhost:3000/applications" + suffix, requestOptions)
-            .then((res) => res.json())
+            .then((res) => (res.ok) ? res.json() : Promise.reject(res.statusText))
+            .catch(error => alert(error))
             .then(res => navigate("/applications/" + res.id + "/edit"));
     };
 
     const handleOnChange = (e) => {
         const newApplication = {...currentApplication};
         changeByPath(e.target.name, newApplication, e.target.value);
-        console.log(newApplication)
+        console.log(newApplication);
         setApplication(newApplication);
     };
 
