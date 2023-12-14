@@ -7,8 +7,10 @@ import ch.applicator.jooq.Tables
 import org.jooq.Record
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.*
 
 @RestController
@@ -41,9 +43,17 @@ class ApplicationController @Autowired constructor(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody body: ApplicationCreate): Application {
+    fun create(@RequestBody body: ApplicationCreate): ResponseEntity<Application> {
         val uuid = applicationRepository.create(body.job, body.coverLetter)
-        return getApplicationById(uuid)
+
+        val application = getApplicationById(uuid)
+        val location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(application.id)
+            .toUri()
+
+        return ResponseEntity.created(location).body(application)
     }
 
     data class ApplicationCreate(

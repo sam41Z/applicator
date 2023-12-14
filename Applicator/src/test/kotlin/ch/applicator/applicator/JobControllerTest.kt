@@ -1,6 +1,10 @@
 package ch.applicator.applicator
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.jayway.jsonpath.JsonPath
+import com.jayway.jsonpath.JsonPath.*
+import org.hamcrest.core.StringEndsWith
+import org.hamcrest.core.StringEndsWith.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -10,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import org.testcontainers.junit.jupiter.Testcontainers
+import java.net.URI
 
 @SpringBootTest
 @Testcontainers
@@ -49,12 +54,25 @@ class JobControllerTest @Autowired constructor(
 
     @Test
     fun create() {
-        mockMvc.perform(
+        val mvcResult = mockMvc.perform(
             post("/jobs")
                 .contentType("application/json")
                 .content(getCreateJobJson())
         )
             .andExpect(status().isCreated())
+            .andExpect { res ->
+                header().string(
+                    "Location",
+                    endsWith("/jobs/" + read(res.response.contentAsString, "$.id"))
+                ).match(res)
+            }
+            .andReturn()
+        val id = read<Any?>(mvcResult.response.contentAsString, "$.id").toString()
+        val location = mvcResult.response.getHeader("Location")
+        mockMvc.perform(get(URI(location!!)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(id))
+
     }
 
     @Test

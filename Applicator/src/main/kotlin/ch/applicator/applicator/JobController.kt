@@ -1,16 +1,19 @@
 package ch.applicator.applicator
 
-import ch.applicator.applicator.api.Application
 import ch.applicator.applicator.api.Job
 import ch.applicator.jooq.Tables
 import org.jooq.Record
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
 import java.net.URL
-import java.util.UUID
+import java.util.*
+
 
 @RestController
 @RequestMapping("/jobs")
@@ -29,6 +32,7 @@ class JobController @Autowired constructor(
         return jobRepository.getAllJobs().map { record -> mapJob(record) }
     }
 
+
     @PutMapping("/{id}")
     fun update(@PathVariable id: UUID, @RequestBody body: Job): Job {
         if (id != body.id) {
@@ -45,10 +49,18 @@ class JobController @Autowired constructor(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody body: JobIn): Job {
+    fun create(@RequestBody body: JobIn): ResponseEntity<Job> {
         val employerId = employerRepository.create(body.employer.name, body.employer.websiteUrl)
         val jobId = jobRepository.create(employerId, body.description, body.position, body.originalUrl)
-        return getJobById(jobId)
+
+        val job = getJobById(jobId)
+        val location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(job.id)
+            .toUri()
+
+        return ResponseEntity.created(location).body(job)
     }
 
     private fun getJobById(id: UUID) = jobRepository.getJob(id).map { record -> mapJob(record) }
