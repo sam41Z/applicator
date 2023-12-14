@@ -49,4 +49,10 @@ class ApplicationRepository @Autowired constructor(val create: DSLContext) {
             .where(APPLICATION.JOB.eq(jobId))
             .fetch()
     }
+
+    fun delete(id: UUID) {
+        create.deleteFrom(APPLICATION)
+            .where(APPLICATION.ID.eq(id))
+            .execute()
+    }
 }

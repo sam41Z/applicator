@@ -56,6 +56,19 @@ class ApplicationControllerTest @Autowired constructor(
             .andExpect(jsonPath("$.id").value(id))
     }
 
+    @Test
+    fun delete() {
+        val path = "/applications/3aaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+        mockMvc.perform(
+            delete(path)
+        )
+            .andExpect(status().isNoContent())
+            .andReturn()
+
+        mockMvc.perform(get(path))
+            .andExpect(status().isNotFound())
+    }
+
     fun getUpdateApplicationJson(): String {
         val mapper: ObjectMapper = ObjectMapper()
         val root = mapper.createObjectNode()
