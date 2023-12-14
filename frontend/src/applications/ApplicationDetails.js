@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
+import {PencilFill, SendFill} from "react-bootstrap-icons";
 
 export default function ApplicationDetails({jobId}) {
     const url = "http://localhost:3000/applications?jobId=" + jobId;
@@ -32,13 +33,13 @@ export default function ApplicationDetails({jobId}) {
                     </div>
                 </div>
                 <Link to={"/applications/" + application.id + "/edit"} className="btn btn-outline-primary">
-                    Edit Application
+                    <PencilFill/> Application
                 </Link>
             </div>
         );
     } else if (!isLoading) {
         return (
-            <Link to={"/jobs/" + jobId + "/apply"} className="btn btn-primary">Apply</Link>
+            <Link to={"/jobs/" + jobId + "/apply"} className="btn btn-primary"><SendFill/> Apply</Link>
         );
     } else {
         return (

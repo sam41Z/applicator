@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
+import {EnvelopeFill, EnvelopePlusFill, Pencil, PencilFill, SendFill, SendXFill} from "react-bootstrap-icons";
 
 export default function ApplicationStatus({jobId}) {
     const url = "http://localhost:3000/applications?jobId=" + jobId;
@@ -70,7 +71,7 @@ export default function ApplicationStatus({jobId}) {
         );
     } else {
         return (
-            <Link to={"/jobs/" + jobId + "/apply"} className="btn btn-primary col-6">Apply</Link>
+            <Link to={"/jobs/" + jobId + "/apply"} className="btn btn-primary col-6"><SendFill/> Apply</Link>
         );
     }
 }
