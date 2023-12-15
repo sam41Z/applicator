@@ -32,8 +32,7 @@ export default function JobForm({job}) {
         fetch("http://localhost:3000/jobs" + suffix, requestOptions)
             .then((res) => (res.ok) ? res.json() : Promise.reject(res.statusText))
             .catch(error => showInfoModal("Error", error, "OK"))
-            .then(d => navigate("/jobs/" + d.id + "/edit"));
-
+            .then(d => navigate(-1));
     };
 
     const handleOnChange = e => {
