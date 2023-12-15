@@ -4,7 +4,7 @@ import {CaretDown, CaretDownFill, CaretUp, CaretUpFill} from "react-bootstrap-ic
 
 export default function JobDetails({job, collapse}) {
     const [showDescription, setShowDescription] = useState(!collapse);
-    const toggle = () => setShowDescription(!showDescription);
+    const toggle = () => setShowDescription(!collapse || !showDescription);
     return (
         <div>
             <h4><a href={job.original_url}>{job.position}</a></h4>
@@ -14,13 +14,13 @@ export default function JobDetails({job, collapse}) {
                 </a>
             </h5>
             <div className="card mb-3">
-                <div className="card-header" style={{display: "flex", alignItems: "center"}}>
+                <div className="card-header" onClick={toggle} style={{display: "flex", alignItems: "center"}}>
                     <div style={{flexGrow: "1"}}>
-                        <small>Description</small>
+                        Description
                     </div>
-                    {collapse && <button className="btn btn-primary" onClick={toggle}>
+                    {collapse && <Button color="primary" onClick={toggle}>
                         {showDescription ? <CaretUpFill/> : <CaretDownFill/>}
-                    </button>}
+                    </Button>}
                 </div>
                 <Collapse isOpen={showDescription}>
                     <div className="card-body" style={{whiteSpace: "pre-line"}}>

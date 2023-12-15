@@ -29,7 +29,7 @@ function App() {
                                 </ContentCard>
                             }/>
                             <Route path="/jobs/:id" element={
-                                <ContentCard title="Job Details">
+                                <ContentCard title="Job Overview">
                                     <JobOverview/>
                                 </ContentCard>
                             }/>
