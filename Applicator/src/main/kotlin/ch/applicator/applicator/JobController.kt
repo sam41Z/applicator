@@ -6,8 +6,6 @@ import org.jooq.Record
 import org.jooq.exception.NoDataFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataIntegrityViolationException
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatus.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -56,7 +54,7 @@ class JobController @Autowired constructor(
 
     @PostMapping
     @ResponseStatus(CREATED)
-    fun create(@RequestBody body: JobIn): ResponseEntity<Job> {
+    fun create(@RequestBody body: JobCreate): ResponseEntity<Job> {
         val employerId = employerRepository.create(body.employer.name, body.employer.websiteUrl)
         val jobId = jobRepository.create(employerId, body.description, body.position, body.originalUrl)
 
@@ -70,13 +68,13 @@ class JobController @Autowired constructor(
         return ResponseEntity.created(location).body(job)
     }
 
-    data class JobIn(
-        val employer: EmployerIn,
+    data class JobCreate(
+        val employer: EmployerCreate,
         val description: String,
         val position: String,
         val originalUrl: URL
     ) {
-        data class EmployerIn(
+        data class EmployerCreate(
             val name: String,
             val websiteUrl: URL
         )
