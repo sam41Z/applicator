@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import ApplicationStatus from "../applications/ApplicationStatus";
 import app from "../App";
 import ApplicationDetails from "../applications/ApplicationDetails";
+import {PencilFill} from "react-bootstrap-icons";
 
 export default function JobDetails() {
     const {id} = useParams();
@@ -25,7 +26,8 @@ export default function JobDetails() {
         return (
             <div>
                 <h4><a href={job.original_url}>{job.position}</a></h4>
-                <h5 className="text-body-secondary mb-3"><a className="link-secondary" href={job.employer.website_url}>{job.employer.name}</a></h5>
+                <h5 className="text-body-secondary mb-3"><a className="link-secondary"
+                                                            href={job.employer.website_url}>{job.employer.name}</a></h5>
                 <div className="card mb-3">
                     <div className="card-header" style={{display: "flex", alignItems: "center"}}>
                         <div style={{flexGrow: "1"}}>
@@ -36,8 +38,8 @@ export default function JobDetails() {
                         {job.description}
                     </div>
                 </div>
-                <Link to="edit" className="btn btn-outline-primary mb-3">Edit Job</Link>
-                <ApplicationDetails jobId={job.id}/>
+                <div><Link to="edit" className="btn btn-outline-primary mb-3"><PencilFill/> Job</Link></div>
+                <div><ApplicationDetails jobId={job.id}/></div>
             </div>
         );
     } else {

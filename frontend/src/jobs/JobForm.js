@@ -1,6 +1,7 @@
 import {useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import changeByPath from "../utils";
+import {DiscFill, Save2Fill, SaveFill} from "react-bootstrap-icons";
 
 export default function JobForm({job}) {
     const initialJob = job ? {...job} : {
@@ -74,7 +75,7 @@ export default function JobForm({job}) {
                           value={currentJob.description}
                           onChange={handleOnChange}></textarea>
             </div>
-            <button type="submit" className="btn btn-primary">Save</button>
+            <button type="submit" className="btn btn-primary"><Save2Fill/></button>
         </form>
     )
         ;

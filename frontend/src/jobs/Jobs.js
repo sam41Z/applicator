@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import ApplicationStatus from "../applications/ApplicationStatus";
-import {Trash3Fill} from "react-bootstrap-icons";
+import {Briefcase, BriefcaseFill, Plus, PlusLg, Trash3Fill} from "react-bootstrap-icons";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 
 export default function Jobs() {
@@ -87,7 +87,7 @@ export default function Jobs() {
     return (
         <div>
             {modal()}
-            <Link to={"jobs/add"} className="btn btn-primary">Add Job</Link>
+            <Link to={"jobs/add"} className="btn btn-primary"><PlusLg/><BriefcaseFill/></Link>
             <table className="table table-hover">
                 <thead>
                 <tr>

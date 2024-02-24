@@ -1,6 +1,7 @@
 import {useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import changeByPath from "../utils";
+import {Save2Fill} from "react-bootstrap-icons";
 
 export default function ApplicationForm({jobId, application}) {
     const initialApplication = application ? application : {
@@ -41,7 +42,7 @@ export default function ApplicationForm({jobId, application}) {
                           onChange={handleOnChange}
                           className="form-control" rows="15"></textarea>
             </div>
-            <button type="submit" className="btn btn-primary">Save</button>
+            <button type="submit" className="btn btn-primary"><Save2Fill/></button>
         </form>
     );
 }
