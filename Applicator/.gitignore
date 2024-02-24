@@ -51,3 +51,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+# Maven
+log/
+target/
+
