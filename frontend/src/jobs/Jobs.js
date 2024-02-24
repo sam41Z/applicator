@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import ApplicationStatus from "../applications/ApplicationStatus";
-import {Briefcase, BriefcaseFill, Plus, PlusLg, Trash3Fill} from "react-bootstrap-icons";
+import {Briefcase, BriefcaseFill, CheckLg, Plus, PlusLg, Trash3Fill, XLg} from "react-bootstrap-icons";
 import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
 
 export default function Jobs() {
@@ -31,14 +31,16 @@ export default function Jobs() {
         fetchJobs();
     }, []);
 
-    const closeDeleteModal = () => setShowDeleteModal(false);
+    const closeDeleteModal = () => {
+        setShowDeleteModal(false);
+        setDeleteJob(undefined);
+    };
     const handleDeleteDelete = (e) => {
         let id = e.target.value;
         closeDeleteModal();
         fetchDeleteJob(id);
     };
-    const openDeleteModal = (e) => {
-        let id = e.target.value;
+    const openDeleteModal = (id) => {
         let job = jobs.find(job => job.id === id);
         setDeleteJob(job);
         setShowDeleteModal(true);
@@ -53,7 +55,7 @@ export default function Jobs() {
                     <td onClick={() => navigate("jobs/" + job.id)}> {job.position}</td>
                     <td><ApplicationStatus jobId={job.id}/></td>
                     <td>
-                        <button className="btn btn-danger" value={job.id} onClick={openDeleteModal}>
+                        <button className="btn btn-danger" onClick={() => openDeleteModal(job.id)}>
                             <Trash3Fill/>
                         </button>
                     </td>
@@ -62,6 +64,7 @@ export default function Jobs() {
         });
 
     const modal = () => {
+        console.log(deleteJob);
         if (deleteJob) {
             return (
                 <Modal isOpen={showDeleteModal} toggle={closeDeleteModal}>
@@ -70,12 +73,11 @@ export default function Jobs() {
                         Are you sure you want to remove {deleteJob.position} at {deleteJob.employer.name}?
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" value={deleteJob.id} onClick={handleDeleteDelete}>
-
-                            Yes, Im sure!
+                        <Button color="primary" onClick={() => handleDeleteDelete(deleteJob.id)}>
+                            <CheckLg/> Yes, Im sure!
                         </Button>{" "}
                         <Button color="secondary" onClick={closeDeleteModal}>
-                            No no...
+                            <XLg/> No no!
                         </Button>
                     </ModalFooter>
                 </Modal>);
