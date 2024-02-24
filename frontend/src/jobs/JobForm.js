@@ -5,6 +5,7 @@ import {DiscFill, Save2Fill, SaveFill} from "react-bootstrap-icons";
 import {InfoModalContext} from "../modals/InfoModalContext";
 import FloppyFill from "../FloppyFill";
 import Floppy from "../Floppy";
+import {Button} from "reactstrap";
 
 export default function JobForm({job}) {
     const initialJob = job ? {...job} : {
@@ -78,7 +79,7 @@ export default function JobForm({job}) {
                           value={currentJob.description}
                           onChange={handleOnChange}></textarea>
             </div>
-            <button type="submit" className="btn btn-primary"><FloppyFill/> Save</button>
+            <Button type="submit" color="primary"><FloppyFill/> Save</Button>
         </form>
     );
 

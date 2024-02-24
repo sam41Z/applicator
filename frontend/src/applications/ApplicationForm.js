@@ -4,6 +4,7 @@ import changeByPath from "../utils";
 import {Save2Fill} from "react-bootstrap-icons";
 import {InfoModalContext} from "../modals/InfoModalContext";
 import FloppyFill from "../FloppyFill";
+import {Button} from "reactstrap";
 
 export default function ApplicationForm({jobId, application}) {
     const initialApplication = application ? application : {
@@ -14,7 +15,6 @@ export default function ApplicationForm({jobId, application}) {
     const navigate = useNavigate();
     const showInfoModal = useContext(InfoModalContext);
     const [currentApplication, setApplication] = useState(initialApplication);
-    const [job, setJob] = useState(undefined)
 
     const saveApplication = (event) => {
         event.preventDefault();
@@ -45,7 +45,7 @@ export default function ApplicationForm({jobId, application}) {
                           onChange={handleOnChange}
                           className="form-control" rows="15"></textarea>
             </div>
-            <button type="submit" className="btn btn-primary"><FloppyFill/> Save</button>
+            <Button type="submit" color="primary"><FloppyFill/> Save</Button>
         </form>
     );
 }

@@ -7,6 +7,7 @@ import {InfoModalContext} from "./modals/InfoModalContext";
 import {deleteJob, getJob} from "./jobs/JobAPI";
 import JobDetails from "./jobs/JobDetails";
 import {deleteApplication, getApplicationByJobId} from "./applications/ApplicationAPI";
+import {Button} from "reactstrap";
 
 export default function JobOverview() {
     const {id} = useParams();
@@ -25,7 +26,10 @@ export default function JobOverview() {
 
     const handleDeleteApplication = (applicationId) => {
         deleteApplication(applicationId)
-            .then(() => setApplication(undefined))
+            .then(() => {
+                setApplication(undefined)
+                setShowApplyButton(true)
+            })
             .catch(error => showInfoModal("Error", error, "OK"));
     };
 
@@ -46,7 +50,7 @@ export default function JobOverview() {
             {job && <div><JobDetails job={job} collapse={false}/>
                 <div className="mb-3">
                     <Link to="edit" className="btn btn-outline-primary me-3"><PencilFill/> Job</Link>
-                    <button className="btn btn-outline-danger" onClick={() => showActionModal(
+                    <Button color="danger" outline={true}  disabled={!showApplyButton} onClick={() => showActionModal(
                         "Delete Job",
                         "Are you sure you want to remove \"" + job.position + "\" at \"" +
                         job.employer.name + "\"?",
@@ -55,16 +59,16 @@ export default function JobOverview() {
                         job.id,
                         handleDeleteJob)}>
                         <Trash3Fill/>
-                    </button>
+                    </Button>
                 </div>
             </div>}
             {application && <div>
-                <ApplicationDetails jobId={job.id}/>
+                <ApplicationDetails application={application}/>
                 <div>
                     <Link to={"/applications/" + application.id + "/edit"} className="btn btn-outline-primary me-3">
                         <PencilFill/> Application
                     </Link>
-                    <button className="btn btn-outline-danger" onClick={() => showActionModal(
+                    <Button color="danger" outline={true} onClick={() => showActionModal(
                         "Delete Application",
                         "Are you sure you want to remove your application?",
                         "No no!",
@@ -72,10 +76,10 @@ export default function JobOverview() {
                         application.id,
                         handleDeleteApplication)}>
                         <Trash3Fill/>
-                    </button>
+                    </Button>
                 </div>
             </div>}
-            {setShowApplyButton && <Link to={"/jobs/" + id + "/apply"} className="btn btn-primary">
+            {showApplyButton && <Link to={"/jobs/" + id + "/apply"} className="btn btn-primary">
                 <SendFill/> Apply
             </Link>}
         </div>

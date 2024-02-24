@@ -1,4 +1,4 @@
-export function getJob(id, handler) {
+export function getJob(id) {
     const url = "http://localhost:3000/jobs/" + id;
     return fetch(url)
         .then((res) => res.json());

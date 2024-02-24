@@ -36,8 +36,8 @@ export default function Jobs() {
                 <thead>
                 <tr>
                     <th scope="col" className="col-4">Employer</th>
-                    <th scope="col" className="col-6">Position</th>
-                    <th scope="col" className="col-2">Status</th>
+                    <th scope="col" className="col-5">Position</th>
+                    <th scope="col" className="col-3">Status</th>
                 </tr>
                 </thead>
                 <tbody>{listItems}</tbody>
