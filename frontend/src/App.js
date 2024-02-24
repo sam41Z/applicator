@@ -2,7 +2,7 @@ import "./App.css";
 import Jobs from "./jobs/Jobs";
 import ContentCard from "./ContentCard";
 import {Route, BrowserRouter, Routes, Link} from "react-router-dom";
-import JobDetails from "./jobs/JobDetails";
+import JobOverview from "./JobOverview";
 import ApplicationForm from "./applications/./ApplicationForm";
 import AddJob from "./jobs/AddJob";
 import EditJob from "./jobs/EditJob";
@@ -11,6 +11,8 @@ import EditApplication from "./applications/EditApplication";
 import ActionModal from "./modals/ActionModal";
 import {InfoModalContext} from "./modals/InfoModalContext";
 import InfoModal from "./modals/InfoModal";
+import {BriefcaseFill, PlusLg} from "react-bootstrap-icons";
+import React from "react";
 
 function App() {
 
@@ -18,6 +20,7 @@ function App() {
         <div className="App">
             <InfoModal>
                 <ActionModal>
+
                     <BrowserRouter>
                         <Routes>
                             <Route path="/" element={
@@ -27,7 +30,7 @@ function App() {
                             }/>
                             <Route path="/jobs/:id" element={
                                 <ContentCard title="Job Details">
-                                    <JobDetails/>
+                                    <JobOverview/>
                                 </ContentCard>
                             }/>
                             <Route path="/jobs/add" element={

@@ -14,6 +14,7 @@ export default function ApplicationForm({jobId, application}) {
     const navigate = useNavigate();
     const showInfoModal = useContext(InfoModalContext);
     const [currentApplication, setApplication] = useState(initialApplication);
+    const [job, setJob] = useState(undefined)
 
     const saveApplication = (event) => {
         event.preventDefault();
@@ -27,13 +28,12 @@ export default function ApplicationForm({jobId, application}) {
         fetch("http://localhost:3000/applications" + suffix, requestOptions)
             .then((res) => (res.ok) ? res.json() : Promise.reject(res.statusText))
             .catch(error => showInfoModal("Error", error, "OK"))
-            .then(res => navigate("/applications/" + res.id + "/edit"));
+            .then(res => navigate(-1));
     };
 
     const handleOnChange = (e) => {
         const newApplication = {...currentApplication};
         changeByPath(e.target.name, newApplication, e.target.value);
-        console.log(newApplication);
         setApplication(newApplication);
     };
 
