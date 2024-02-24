@@ -12,6 +12,16 @@ export function getApplication(id) {
         .then((res) => res.json());
 }
 
+export function putApplication(application) {
+    const requestOptions = {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(application)
+    };
+    return fetch(baseUrl + "/" + application.id, requestOptions)
+        .then((res) => res.json());
+}
+
 export function deleteApplication(id) {
     const requestOptions = {
         method: "DELETE",
