@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/applicator
+    username: user
+    password: secret
+  flyway:
+    locations: "classpath:db/migration"
+  jooq:
+    sql-dialect: postgres
+  jackson:
+    property-naming-strategy: "SNAKE_CASE"
