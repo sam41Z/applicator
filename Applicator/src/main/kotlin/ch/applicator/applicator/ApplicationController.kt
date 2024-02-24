@@ -5,7 +5,9 @@ import ch.applicator.applicator.api.ApplicationStatus
 import ch.applicator.applicator.api.Job
 import ch.applicator.jooq.Tables
 import org.jooq.Record
+import org.jooq.exception.NoDataFoundException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -21,7 +23,11 @@ class ApplicationController @Autowired constructor(
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: UUID): Application {
-        return getApplicationById(id)
+        try {
+            return getApplicationById(id)
+        } catch (e: NoDataFoundException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "No application with this ID", e)
+        }
     }
 
     @GetMapping()
@@ -60,6 +66,12 @@ class ApplicationController @Autowired constructor(
         var job: UUID,
         var coverLetter: String
     )
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: UUID) {
+        applicationRepository.delete(id)
+    }
 
     private fun getApplicationById(id: UUID) = applicationRepository.get(id).map { record -> mapApplication(record) }
 

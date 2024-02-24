@@ -70,6 +70,18 @@ class JobController @Autowired constructor(
         return ResponseEntity.created(location).body(job)
     }
 
+    data class JobIn(
+        val employer: EmployerIn,
+        val description: String,
+        val position: String,
+        val originalUrl: URL
+    ) {
+        data class EmployerIn(
+            val name: String,
+            val websiteUrl: URL
+        )
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     fun delete(@PathVariable id: UUID) {
@@ -84,20 +96,7 @@ class JobController @Autowired constructor(
         }
     }
 
-
     private fun getJobById(id: UUID) = jobRepository.getJob(id).map { record -> mapJob(record) }
-
-    data class JobIn(
-        val employer: EmployerIn,
-        val description: String,
-        val position: String,
-        val originalUrl: URL
-    ) {
-        data class EmployerIn(
-            val name: String,
-            val websiteUrl: URL
-        )
-    }
 
     private fun mapJob(record: Record): Job {
         val jobRecord = record.into(Tables.JOB)
