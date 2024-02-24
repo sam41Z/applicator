@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import ApplicationStatus from "../applications/ApplicationStatus";
-import {Briefcase, BriefcaseFill, CheckLg, Plus, PlusLg, Trash3Fill, XLg} from "react-bootstrap-icons";
-import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import {BriefcaseFill, PlusLg, Trash3Fill} from "react-bootstrap-icons";
+import {ActionModalContext} from "../modals/ActionModalContext";
+import {InfoModalContext} from "../modals/InfoModalContext";
 
 export default function Jobs() {
     const url = "http://localhost:3000/jobs";
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [applications, setApplications] = useState([]);
-    const [deleteJob, setDeleteJob] = useState(undefined);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const showActionModal = useContext(ActionModalContext);
+    const showInfoModal = useContext(InfoModalContext);
 
     const fetchJobs = () => {
         return fetch(url)
@@ -23,28 +24,14 @@ export default function Jobs() {
             method: "DELETE",
         };
         fetch("http://localhost:3000/jobs/" + jobId, requestOptions)
+            .then(res => res.ok ? Promise.resolve() : Promise.reject(res.statusText))
             .then(fetchJobs)
-            .catch(error => alert(error));
+            .catch(error => showInfoModal("Error", error, "OK"));
     };
 
     useEffect(() => {
         fetchJobs();
     }, []);
-
-    const closeDeleteModal = () => {
-        setShowDeleteModal(false);
-        setDeleteJob(undefined);
-    };
-    const handleDeleteDelete = (e) => {
-        let id = e.target.value;
-        closeDeleteModal();
-        fetchDeleteJob(id);
-    };
-    const openDeleteModal = (id) => {
-        let job = jobs.find(job => job.id === id);
-        setDeleteJob(job);
-        setShowDeleteModal(true);
-    };
 
     const listItems = jobs
         .map(job => {
@@ -55,7 +42,14 @@ export default function Jobs() {
                     <td onClick={() => navigate("jobs/" + job.id)}> {job.position}</td>
                     <td><ApplicationStatus jobId={job.id}/></td>
                     <td>
-                        <button className="btn btn-danger" onClick={() => openDeleteModal(job.id)}>
+                        <button className="btn btn-danger" onClick={() => showActionModal(
+                            "Delete Job",
+                            "Are you sure you want to remove \"" + job.position + "\" at \"" +
+                            job.employer.name + "\"?",
+                            "No no!",
+                            "Yes, Im sure!",
+                            job.id,
+                            fetchDeleteJob)}>
                             <Trash3Fill/>
                         </button>
                     </td>
@@ -63,32 +57,8 @@ export default function Jobs() {
             );
         });
 
-    const modal = () => {
-        console.log(deleteJob);
-        if (deleteJob) {
-            return (
-                <Modal isOpen={showDeleteModal} toggle={closeDeleteModal}>
-                    <ModalHeader>Delete Job</ModalHeader>
-                    <ModalBody>
-                        Are you sure you want to remove {deleteJob.position} at {deleteJob.employer.name}?
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="primary" onClick={() => handleDeleteDelete(deleteJob.id)}>
-                            <CheckLg/> Yes, Im sure!
-                        </Button>{" "}
-                        <Button color="secondary" onClick={closeDeleteModal}>
-                            <XLg/> No no!
-                        </Button>
-                    </ModalFooter>
-                </Modal>);
-        } else {
-            return "";
-        }
-    };
-
     return (
         <div>
-            {modal()}
             <Link to={"jobs/add"} className="btn btn-primary"><PlusLg/><BriefcaseFill/></Link>
             <table className="table table-hover">
                 <thead>
