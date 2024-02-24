@@ -76,6 +76,32 @@ class JobControllerTest @Autowired constructor(
     }
 
     @Test
+    fun delete() {
+        val path = "/jobs/2bbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+        mockMvc.perform(
+            delete(path)
+        )
+            .andExpect(status().isNoContent())
+            .andReturn()
+
+        mockMvc.perform(get(path))
+            .andExpect(status().isNotFound())
+    }
+
+    @Test
+    fun deleteNotPossibleBecauseOfApplication() {
+        val path = "/jobs/4bbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+        mockMvc.perform(
+            delete(path)
+        )
+            .andExpect(status().isConflict())
+            .andReturn()
+
+        mockMvc.perform(get(path))
+            .andExpect(status().isOk())
+    }
+
+    @Test
     fun update() {
         mockMvc.perform(
             put("/jobs/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb")
